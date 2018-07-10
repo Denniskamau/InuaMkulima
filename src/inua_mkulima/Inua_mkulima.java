@@ -16,6 +16,8 @@ public class Inua_mkulima {
      */
     public static void main(String[] args) {
         // TODO code application logic here
+        
     }
     
 }
+
