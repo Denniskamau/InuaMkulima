@@ -28,8 +28,8 @@ public class Farmer  extends JFrame{
     private JButton btnSubmit;
     private JTextField txtField ;
     // Message arraylist
-    ArrayList<String> messages = new ArrayList<String>();
-
+    ArrayList<String> posts = new ArrayList<String>();
+    ArrayList<String> officerMessages = new ArrayList<String>();
     public Farmer() {
         //define a menu bar,a menu and menu items
         JMenuBar menubar = new JMenuBar();
@@ -38,7 +38,7 @@ public class Farmer  extends JFrame{
             @Override
             public void menuSelected(MenuEvent e) {
                 postNewMessage();
-                System.out.println("message is  "+ messages);
+                System.out.println("message is  "+ posts);
             }
             @Override
             public void menuDeselected(MenuEvent e) {
@@ -144,7 +144,7 @@ public class Farmer  extends JFrame{
                 System.out.println("receiving message");
                 txtField.setText("");
                 String message = txtField.getText();
-                messages.add(message);
+                posts.add(message);
             }
         });
   
@@ -153,11 +153,11 @@ public class Farmer  extends JFrame{
         btnSubmit.addActionListener(new ActionListener(){
             @Override
             public void actionPerformed(ActionEvent submitClicked) {
-                messages.add(txtField.getText());
+                posts.add(txtField.getText());
         
                 Component frame = new JFrame();
                 JOptionPane.showMessageDialog(frame , "Your message has been saved.Thanks" );
-                System.out.println(messages);
+                System.out.println(posts);
             }
         
         });
@@ -170,18 +170,55 @@ public class Farmer  extends JFrame{
     }
     //Load Inbox
     public void loadInbox(){
+        Container container = getContentPane();
+        container.setLayout(new FlowLayout());
+        // Call the messages array to view messages.
         System.out.println("Loading inbox");
      
     }
 
     //Talk to officer method
     public void talkToOfficer(){
-        System.out.println("talking to officer");
+        Container container = getContentPane();
+        container.setLayout(new FlowLayout());
+        messageLabel = new JLabel("Enter Message for Officer.");
+        
+        txtField = new JTextField("Message..",20);
+        
+        txtField.addActionListener(new ActionListener(){
+            public void actionPerformed(ActionEvent evt){
+                System.out.println("receiving message");
+                txtField.setText("");
+                String message = txtField.getText();
+                officerMessages.add(message);
+            }
+        });
+  
+
+        btnSubmit = new JButton("Submit ");
+        btnSubmit.addActionListener(new ActionListener(){
+            @Override
+            public void actionPerformed(ActionEvent submitClicked) {
+                officerMessages.add(txtField.getText());
+        
+                Component frame = new JFrame();
+                JOptionPane.showMessageDialog(frame , "Your message has been saved.Thanks" );
+                System.out.println(officerMessages);
+            }
+        
+        });
+        container.add(messageLabel);
+        container.add(txtField);
+        container.add(btnSubmit);
+        setSize(600,500);
+        setVisible(true);
+
     }
 
     //Fetch market
     public void fetchMarket(){
-        System.out.println("fetching market");
+        // Load market array
+        
     }
 
 
