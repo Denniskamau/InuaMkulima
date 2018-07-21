@@ -7,6 +7,7 @@ package inua_mkulima;
 
 import java.awt.Color;
 import java.sql.DriverManager;
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
 import javax.swing.JOptionPane;
@@ -20,6 +21,7 @@ public class Login extends javax.swing.JFrame {
     java.sql.Connection conn = null;
     ResultSet rs = null;
     Statement st;
+    PreparedStatement pst;
 
     public Login() {
         initComponents();
@@ -139,15 +141,23 @@ public class Login extends javax.swing.JFrame {
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
         // TODO add your handling code here:
         try {
-            int log = 1;
             conn = DriverManager.getConnection("jdbc:derby://localhost:1527/inuaMkulima", "inuaMkulima", "admin");
-            st = (Statement) conn.createStatement();
-            rs = st.executeQuery("SELECT * FROM INUAMKULIMA.USERS");
+            int log = 1;            
+            String name = txtUsername.getText();
+            String query = ("SELECT * FROM INUAMKULIMA.USERS where Name = ? ");
+            pst = conn.prepareStatement(query);
+            pst.setString(1, name);
+            rs = pst.executeQuery();
             while (rs.next()) {
-                if (rs.getString(1).equals(txtUsername.getText())){ 
+                if (rs.getString(1).equals(txtUsername.getText())){
+                    query = ("UPDATE INUAMKULIMA.USERS SET Status = ? where Name = ?");
+                    pst = conn.prepareStatement(query);
+                    pst.setString(1, "online");
+                    pst.setString(2, name);
+                    pst.executeUpdate();
                     if (rs.getString(2).equals(txtPassword.getText())) {
-                        log = 0;
-                        break;
+                    log = 0;
+                    break;
                     }else {
                         JOptionPane.showMessageDialog(null, "Invalid Password");
                         break;

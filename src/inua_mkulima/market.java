@@ -6,8 +6,15 @@
 package inua_mkulima;
 
 import java.awt.Dimension;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.ArrayList;
 import java.util.Date;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.GroupLayout;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
@@ -25,20 +32,24 @@ public class market extends javax.swing.JFrame {
     public ArrayList<String> namePosts = new ArrayList<String>();
     public ArrayList<String> typePosts = new ArrayList<String>();
     public ArrayList<String> messagePosts = new ArrayList<String>();
-    /**
-     * Creates new form market
-     */
+    java.sql.Connection conn = null;
+    ResultSet rs = null;
+    Statement st;
+    PreparedStatement pst;
+    String name = null;
+    String type = null;
+        
     public market() {
         initComponents();
         
-        setSize(new Dimension(getWidth(),320));
+        setSize(new Dimension(getWidth(),420));
         setTitle("Market");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
         
         jPanel5.setVisible(false);
         jPanel7.setVisible(false);
-        jPanel9.setVisible(false);
+        jPanel9.setVisible(false); 
     }
 
     /**
@@ -451,44 +462,62 @@ public class market extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void button1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button1ActionPerformed
-        // TODO add your handling code here:
-        String name = JOptionPane.showInputDialog(null,"enter your name:");
-        if (name != null && !name.isEmpty()){
-            namePosts.add(name);
-            String message = JOptionPane.showInputDialog(null,"Write your post:");
-            if (message != null && !message.isEmpty()){
-                System.out.println("Market entered: " + message);
-                //store the message into an array
-                messagePosts.add(message);
-                String type = "(market)";
+        try 
+        {
+            conn = DriverManager.getConnection("jdbc:derby://localhost:1527/inuaMkulima", "inuaMkulima", "admin");
+            st = conn.createStatement();
+            String query = ("SELECT * FROM INUAMKULIMA.USERS where Status = ? ");
+            pst = conn.prepareStatement(query);
+            pst.setString(1, "online");
+            rs = pst.executeQuery();
+            if (rs.next()){
+                System.out.println(rs.getString(1));    
+                name = rs.getString(1);
+                type = rs.getString(3);
                 Date date= new Date();
-                if (!jPanel7.isVisible()){
-                    jLabel6.setText(name);
-                    jLabel7.setText(type);
-                    typePosts.add(type);
-                    jLabel8.setText(message);
-                    jLabel9.setText(date.toString());
-                    jPanel7.setVisible(true);
-                    this.setSize(new Dimension(getWidth(),420));
-                    home home = new home();
-                    home.update(name, type, message);
-                }else if(!jPanel5.isVisible()){
-                    jLabel10.setText(name);
-                    jLabel11.setText("(market)");
-                    jLabel12.setText(message);
-                    jLabel13.setText(date.toString());
-                    jPanel5.setVisible(true);  
-                    this.setSize(new Dimension(getWidth(),520));      
-                }else if(!jPanel9.isVisible()){
-                    jLabel14.setText(name);
-                    jLabel15.setText("(market)");
-                    jLabel16.setText(message);
-                    jLabel17.setText(date.toString());
-                    jPanel9.setVisible(true); 
-                    this.setSize(new Dimension(getWidth(),620));
+                String message = JOptionPane.showInputDialog(null,"Write your post:");
+                if (message != null && !message.isEmpty()){
+                    query = ("insert into INUAMKULIMA.TRENDS(Message, Type, Name, Date)values(?,?,?,?)");
+                    pst = conn.prepareStatement(query);
+                    pst.setString(1, message);        
+                    pst.setString(2, "("+type+")");
+                    pst.setString(3, name);
+                    pst.setString(4, date.toString());
+                    pst.executeUpdate();
+                    JOptionPane.showMessageDialog(null, "Posted successfully!!");
+                    if (!jPanel7.isVisible()){
+                        jLabel6.setText(name);
+                        jLabel7.setText(type);
+                        typePosts.add(type);
+                        jLabel8.setText(message);
+                        jLabel9.setText(date.toString());
+                        jPanel7.setVisible(true);
+                        this.setSize(new Dimension(getWidth(),420));
+                        home home = new home();
+                        home.update(name, type, message);
+                    }else if(!jPanel5.isVisible()){
+                        jLabel10.setText(name);
+                        jLabel11.setText("(market)");
+                        jLabel12.setText(message);
+                        jLabel13.setText(date.toString());
+                        jPanel5.setVisible(true);  
+                        this.setSize(new Dimension(getWidth(),520));      
+                    }else if(!jPanel9.isVisible()){
+                        jLabel14.setText(name);
+                        jLabel15.setText("(market)");
+                        jLabel16.setText(message);
+                        jLabel17.setText(date.toString());
+                        jPanel9.setVisible(true); 
+                        this.setSize(new Dimension(getWidth(),620));
+                    }
                 }
             }
-        }
+        }catch (SQLException e ) 
+        {
+            e.printStackTrace();
+        } 
+        
+        
     }//GEN-LAST:event_button1ActionPerformed
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed

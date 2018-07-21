@@ -9,7 +9,12 @@ import static com.sun.org.apache.xalan.internal.lib.ExsltDatetime.date;
 import java.awt.BorderLayout;
 import java.awt.Color;
 import java.awt.Dimension;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.Statement;
 import java.util.Date;
+import javax.swing.Box;
 import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
@@ -25,7 +30,10 @@ import javax.swing.event.MenuListener;
  * @author georgiegegoh
  */
 public class home extends javax.swing.JFrame {
-
+    java.sql.Connection conn = null;
+    ResultSet rs = null;
+    Statement st;
+    PreparedStatement pst;
     
     public Date date= new Date();
     public home() {
@@ -111,19 +119,53 @@ public class home extends javax.swing.JFrame {
             }
 
         });
+        //logout tab
+        JMenu logOut = new JMenu("Log Out");
+        logOut.setForeground(Color.BLUE);
+        logOut.addMenuListener(new MenuListener() {
+            @Override
+            public void menuSelected(MenuEvent me) {
+                try {
+                    conn = DriverManager.getConnection("jdbc:derby://localhost:1527/inuaMkulima", "inuaMkulima", "admin");
+                    String query = ("UPDATE INUAMKULIMA.USERS SET Status = ? WHERE Status = ?");
+                    PreparedStatement pst = conn.prepareStatement(query);
+                    pst.setString(1, "offline");
+                    pst.setString(2, "online");
+                    pst.executeUpdate();
+                    new Login().setVisible(true);
+                    setVisible(false);
+                }catch (Exception e) {
+                    e.printStackTrace();
+
+                }
+            }
+
+            @Override
+            public void menuDeselected(MenuEvent me) {
+                new Register().setVisible(false);
+            }
+
+            @Override
+            public void menuCanceled(MenuEvent me) {
+                new Register().setVisible(false);
+            }
+
+        });
 
         //add menus to the menubar
         menubar.add(home);
         menubar.add(farmer);
         menubar.add(officer);
         menubar.add(market);
+        menubar.add(Box.createHorizontalGlue());//create horizontal space
+        menubar.add(logOut);
         setJMenuBar(menubar);
 
         //setting the toolbar
         JToolBar toolbar = new JToolBar();
         toolbar.setFloatable(false);
         
-        setSize(new Dimension(this.getPreferredSize().width, 600));
+        setSize(new Dimension(1040, 600));
         setTitle("INUA MKULIMA");
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         setLocationRelativeTo(null);
@@ -134,6 +176,21 @@ public class home extends javax.swing.JFrame {
             update(marikiti.namePosts.get(0), marikiti.typePosts.get(0), marikiti.messagePosts.get(0));
         } else{
            jPanel6.setVisible(false);            
+        }
+        
+        //Retrieve name of the user
+        try {
+            conn = DriverManager.getConnection("jdbc:derby://localhost:1527/inuaMkulima", "inuaMkulima", "admin");
+            String query = ("SELECT * FROM INUAMKULIMA.USERS where Status = ? ");
+            pst = conn.prepareStatement(query);
+            pst.setString(1, "online");
+            rs = pst.executeQuery();
+            while (rs.next()) {
+                lblUsername.setText(rs.getString(1));
+            }
+        }catch (Exception e) {
+            e.printStackTrace();
+            
         }
     }
 
@@ -175,6 +232,8 @@ public class home extends javax.swing.JFrame {
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         jLabel12 = new javax.swing.JLabel();
+        lblUsername = new javax.swing.JLabel();
+        jLabel16 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(233, 193, 45));
@@ -532,14 +591,27 @@ public class home extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
+        lblUsername.setText("jLabel16");
+
+        jLabel16.setFont(new java.awt.Font("Noto Sans", 1, 12)); // NOI18N
+        jLabel16.setForeground(new java.awt.Color(72, 127, 18));
+        jLabel16.setText("(Online)");
+
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
         jPanel3Layout.setHorizontalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(60, 60, 60)
-                .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(108, Short.MAX_VALUE))
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGap(60, 60, 60)
+                        .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel3Layout.createSequentialGroup()
+                        .addGap(25, 25, 25)
+                        .addComponent(lblUsername)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jLabel16)))
+                .addContainerGap(69, Short.MAX_VALUE))
             .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                 .addGroup(jPanel3Layout.createSequentialGroup()
                     .addGap(60, 60, 60)
@@ -547,12 +619,16 @@ public class home extends javax.swing.JFrame {
                         .addComponent(jPanel9, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jPanel7, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addContainerGap(112, Short.MAX_VALUE)))
+                    .addContainerGap(73, Short.MAX_VALUE)))
         );
         jPanel3Layout.setVerticalGroup(
             jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel3Layout.createSequentialGroup()
-                .addContainerGap(457, Short.MAX_VALUE)
+                .addContainerGap()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblUsername)
+                    .addComponent(jLabel16))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 428, Short.MAX_VALUE)
                 .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(44, 44, 44))
             .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -569,9 +645,14 @@ public class home extends javax.swing.JFrame {
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel5, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-            .addComponent(jPanel3, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(20, 20, 20))
+            .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -638,6 +719,7 @@ public class home extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel14;
     private javax.swing.JLabel jLabel15;
+    private javax.swing.JLabel jLabel16;
     private javax.swing.JLabel jLabel17;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -660,5 +742,6 @@ public class home extends javax.swing.JFrame {
     private javax.swing.JPanel jPanel7;
     private javax.swing.JPanel jPanel8;
     private javax.swing.JPanel jPanel9;
+    private javax.swing.JLabel lblUsername;
     // End of variables declaration//GEN-END:variables
 }

@@ -200,8 +200,8 @@ public class Register extends javax.swing.JFrame {
                             pst.setString(3, comboType.getSelectedItem().toString());
                             pst.executeUpdate();
                             JOptionPane.showMessageDialog(null, "Registered successfully!!");
-                            home openHome = new home();
-                            openHome.setVisible(true);
+                            Login openLogin = new Login();
+                            openLogin.setVisible(true);
                             this.setVisible(false);
                         }
                     }else{
