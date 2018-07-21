@@ -15,9 +15,6 @@ import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JScrollPane;
 import javax.swing.SwingConstants;
-import java.sql.Connection;
-import java.sql.DriverManager;
-import java.sql.SQLException;
 
 /**
  *
@@ -42,16 +39,6 @@ public class market extends javax.swing.JFrame {
         jPanel5.setVisible(false);
         jPanel7.setVisible(false);
         jPanel9.setVisible(false);
-                
-        try {
-            String host = "jdbc:derby://localhost:1527/Employees";
-            String uName = "admin";
-            String uPass= "admin";
-            Connection con = DriverManager.getConnection( host, uName, uPass );
-        }
-        catch ( SQLException err ) {
-            System.out.println( err.getMessage( ) );
-        }
     }
 
     /**
