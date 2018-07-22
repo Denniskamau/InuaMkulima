@@ -60,6 +60,11 @@ public class Mkulima extends javax.swing.JFrame {
         });
 
         jButton3.setText("Inbox");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
 
         jButton4.setText("Talk to Officer");
         jButton4.addActionListener(new java.awt.event.ActionListener() {
@@ -123,24 +128,24 @@ public class Mkulima extends javax.swing.JFrame {
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
-    String nameLabel="Name";
-    String name=JOptionPane.showInputDialog(null, nameLabel);
-    String Msg=JOptionPane.showInputDialog(null, "Enter new post");
      
       String[] messages = null;
-      if(Msg!=null){
-          messages=new String[]{name,Msg };
-          Date date= new Date();
-      } 
-     else {
-           JOptionPane.showMessageDialog(null, "please input a message reply");
-    }
+
+      JOptionPane.showMessageDialog(null, "please input a message");
+    
       System.out.println(Arrays.toString(messages));
     }//GEN-LAST:event_jButton2ActionPerformed
 
     private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
+        // TODO add your handling code here:
+        inbox mpya = new inbox();
+        mpya.show();
+        setVisible(false) ;
+    }//GEN-LAST:event_jButton3ActionPerformed
 
     /**
      * @param args the command line arguments

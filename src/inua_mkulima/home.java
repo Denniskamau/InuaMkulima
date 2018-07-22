@@ -81,18 +81,18 @@ public class home extends javax.swing.JFrame {
         farmer.addMenuListener(new MenuListener() {
             @Override
             public void menuSelected(MenuEvent me) {
-                new farmer1().setVisible(true);
+                new Mkulima().setVisible(true);
                 setVisible(false);
             }
 
             @Override
             public void menuDeselected(MenuEvent me) {
-                new farmer1().setVisible(false);
+                new Mkulima().setVisible(false);
             }
 
             @Override
             public void menuCanceled(MenuEvent me) {
-                new farmer1().setVisible(false);
+                new Mkulima().setVisible(false);
             }
 
         });
