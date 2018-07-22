@@ -5,10 +5,20 @@
  */
 package inua_mkulima;
 
+import java.awt.Graphics2D;
+import java.awt.RenderingHints;
+import java.awt.image.BufferedImage;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.ObjectOutputStream;
+import java.sql.Blob;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.Statement;
+import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
+import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 
 /**
@@ -21,6 +31,9 @@ public class Register extends javax.swing.JFrame {
     ResultSet rs = null;
     Statement st;
     PreparedStatement pst;
+    File f;
+    String filename;
+    ImageIcon ii;
     
     public Register() {
         initComponents();
@@ -50,14 +63,19 @@ public class Register extends javax.swing.JFrame {
         jButton2 = new javax.swing.JButton();
         comboType = new javax.swing.JComboBox<>();
         jButton1 = new javax.swing.JButton();
+        jLabel6 = new javax.swing.JLabel();
+        imageLabel = new javax.swing.JLabel();
+        jButton3 = new javax.swing.JButton();
+        jLabel8 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        jPanel1.setBackground(new java.awt.Color(220, 178, 178));
+        jPanel1.setBackground(new java.awt.Color(169, 139, 76));
 
         jLabel1.setFont(new java.awt.Font("Noto Sans", 1, 24)); // NOI18N
         jLabel1.setText("REGISTRATION");
 
+        jLabel2.setFont(new java.awt.Font("Bitstream Charter", 1, 14)); // NOI18N
         jLabel2.setText("USERNAME:");
 
         txtUsername.addActionListener(new java.awt.event.ActionListener() {
@@ -66,10 +84,13 @@ public class Register extends javax.swing.JFrame {
             }
         });
 
+        jLabel3.setFont(new java.awt.Font("Bitstream Charter", 1, 14)); // NOI18N
         jLabel3.setText("PASSWORD:");
 
+        jLabel4.setFont(new java.awt.Font("Bitstream Charter", 1, 14)); // NOI18N
         jLabel4.setText("CONFIRM PASSWORD:");
 
+        jLabel5.setFont(new java.awt.Font("Bitstream Charter", 1, 14)); // NOI18N
         jLabel5.setText("TYPE OF USER:");
 
         submit.setFont(new java.awt.Font("Noto Sans", 0, 18)); // NOI18N
@@ -102,10 +123,28 @@ public class Register extends javax.swing.JFrame {
             }
         });
 
+        jLabel6.setFont(new java.awt.Font("Bitstream Charter", 1, 14)); // NOI18N
+        jLabel6.setText("UPLOAD IMAGE:");
+
+        imageLabel.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+
+        jButton3.setText("CHOOSE");
+        jButton3.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton3ActionPerformed(evt);
+            }
+        });
+
+        jLabel8.setFont(new java.awt.Font("Gargi", 0, 8)); // NOI18N
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(jButton2)
+                .addGap(217, 217, 217))
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
@@ -114,27 +153,33 @@ public class Register extends javax.swing.JFrame {
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addGap(129, 129, 129)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel4)
+                            .addComponent(jLabel5)
+                            .addComponent(jLabel6))
+                        .addGap(43, 43, 43)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                            .addComponent(txtUsername)
+                            .addComponent(txtPassword)
+                            .addComponent(txtCPassword)
+                            .addComponent(comboType, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                                .addComponent(jButton3)
+                                .addGap(42, 42, 42)
+                                .addComponent(imageLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 61, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(10, 10, 10))
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel2)
-                                    .addComponent(jLabel3)
-                                    .addComponent(jLabel4)
-                                    .addComponent(jLabel5))
-                                .addGap(43, 43, 43)
-                                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                    .addComponent(txtUsername, javax.swing.GroupLayout.DEFAULT_SIZE, 174, Short.MAX_VALUE)
-                                    .addComponent(txtPassword)
-                                    .addComponent(txtCPassword)
-                                    .addComponent(comboType, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                            .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addGap(95, 95, 95)
-                                .addComponent(jButton2))))
+                                .addGap(73, 73, 73)
+                                .addComponent(jLabel8))))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addGap(165, 165, 165)
-                        .addComponent(submit)
-                        .addGap(106, 106, 106)
-                        .addComponent(jButton1)))
-                .addContainerGap(137, Short.MAX_VALUE))
+                        .addGap(175, 175, 175)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addGap(187, 187, 187)
+                                .addComponent(jButton1))
+                            .addComponent(submit))))
+                .addContainerGap(113, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -156,13 +201,24 @@ public class Register extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
                     .addComponent(comboType, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(submit)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(22, 22, 22)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel6)
+                            .addComponent(jButton3)))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addComponent(imageLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel8)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(submit, javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jButton1))
-                .addGap(12, 12, 12)
+                .addGap(18, 18, 18)
                 .addComponent(jButton2)
-                .addGap(0, 49, Short.MAX_VALUE))
+                .addContainerGap())
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -173,36 +229,77 @@ public class Register extends javax.swing.JFrame {
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void txtUsernameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtUsernameActionPerformed
+    private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_txtUsernameActionPerformed
+        JFileChooser chooser = new JFileChooser();
+        chooser.showOpenDialog(null);
+        f = chooser.getSelectedFile();
+        filename = f.getAbsolutePath();
+        try {
+            ii=new ImageIcon(scaleImage(120, 120, ImageIO.read(new File(f.getAbsolutePath()))));//get the image from file chooser and scale it to match JLabel size
+            imageLabel.setIcon(ii);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
+    }//GEN-LAST:event_jButton3ActionPerformed
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+        txtUsername.setText("");
+        txtPassword.setText("");
+        txtCPassword.setText("");
+        comboType.setSelectedIndex(0);
+        imageLabel.setIcon(null);
+        filename = "";
+    }//GEN-LAST:event_jButton1ActionPerformed
+
+    private void comboTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboTypeActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_comboTypeActionPerformed
+
+    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+        // TODO add your handling code here:
+        Login login = new Login();
+        login.setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_jButton2ActionPerformed
 
     private void submitActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_submitActionPerformed
         // TODO add your handling code here:
         try {
+            conn = DriverManager.getConnection("jdbc:derby://localhost:1527/inuaMkulima", "inuaMkulima", "admin");
             if (!txtUsername.getText().isEmpty()){
                 if (!txtPassword.getText().isEmpty()){
                     if (!txtCPassword.getText().isEmpty()){
-                        if (!txtPassword.getText().matches(txtCPassword.getText())){
-                            JOptionPane.showMessageDialog(null, "Passwords do not match");
-                        }else{                            
-                            conn = DriverManager.getConnection("jdbc:derby://localhost:1527/inuaMkulima", "inuaMkulima", "admin");
-                            String query = ("insert into INUAMKULIMA.USERS(Name, Password, Type)values(?,?,?)");
-                            pst = conn.prepareStatement(query);
-                            pst.setString(1, txtUsername.getText());        
-                            pst.setString(2, txtPassword.getText());
-                            pst.setString(3, comboType.getSelectedItem().toString());
-                            pst.executeUpdate();
-                            JOptionPane.showMessageDialog(null, "Registered successfully!!");
-                            Login openLogin = new Login();
-                            openLogin.setVisible(true);
-                            this.setVisible(false);
+                        if (imageLabel.getIcon()!= null ){
+                            if (!txtPassword.getText().matches(txtCPassword.getText())){
+                                JOptionPane.showMessageDialog(null, "Passwords do not match");
+                            }else{
+                                String query = ("insert into INUAMKULIMA.USERS(Name, Password, Type, Image)values(?,?,?,?)");
+                                pst = conn.prepareStatement(query);
+                                pst.setString(1, txtUsername.getText());
+                                pst.setString(2, txtPassword.getText());
+                                pst.setString(3, comboType.getSelectedItem().toString());
+                                File file=new File(filename);
+                                FileInputStream fis=new FileInputStream(file);
+                                JOptionPane.showMessageDialog(null, filename);
+                                pst.setBinaryStream(4,fis,(int)file.length());
+                                pst.executeUpdate();
+                                JOptionPane.showMessageDialog(null, "Registered successfully!!");
+                                Login openLogin = new Login();
+                                openLogin.setVisible(true);
+                                this.setVisible(false);
+                            }
+                        }else{
+                            JOptionPane.showMessageDialog(null, "Choose a picture!");
                         }
                     }else{
                         JOptionPane.showMessageDialog(null, "Enter Confirm Passowrd!");
@@ -214,30 +311,25 @@ public class Register extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, "Enter Username!");
             }
         } catch (Exception e) {
-            e.printStackTrace();            
+            e.printStackTrace();
         }
-            
+
     }//GEN-LAST:event_submitActionPerformed
 
-    private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
+    private void txtUsernameActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtUsernameActionPerformed
         // TODO add your handling code here:
-        Login login = new Login();
-        login.setVisible(true);
-        this.setVisible(false);
-    }//GEN-LAST:event_jButton2ActionPerformed
+    }//GEN-LAST:event_txtUsernameActionPerformed
 
-    private void comboTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_comboTypeActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_comboTypeActionPerformed
-
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-        txtUsername.setText("");
-        txtPassword.setText("");
-        txtCPassword.setText("");
-        comboType.setSelectedIndex(0);
-    }//GEN-LAST:event_jButton1ActionPerformed
-
+    public static BufferedImage scaleImage(int w, int h, BufferedImage img) throws Exception {
+        BufferedImage bi;
+        bi = new BufferedImage(w, h, BufferedImage.TRANSLUCENT);
+        Graphics2D g2d = (Graphics2D) bi.createGraphics();
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        g2d.addRenderingHints(new RenderingHints(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY));
+        g2d.drawImage(img, 0, 0, w, h, null);
+        g2d.dispose();
+        return bi;
+    }
     /**
      * @param args the command line arguments
      */
@@ -275,13 +367,17 @@ public class Register extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JComboBox<String> comboType;
+    private javax.swing.JLabel imageLabel;
     private javax.swing.JButton jButton1;
     private javax.swing.JButton jButton2;
+    private javax.swing.JButton jButton3;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JButton submit;
     private javax.swing.JTextField txtCPassword;

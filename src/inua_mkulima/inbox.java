@@ -19,6 +19,7 @@ public class inbox extends javax.swing.JFrame {
         jLabel1.setText("Sam wa waru");
         jLabel5.setVisible(false);
          jLabel6.setVisible(false);
+         setLocationRelativeTo(null);
     }
 
     /**
