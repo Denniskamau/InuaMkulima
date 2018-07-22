@@ -50,13 +50,15 @@ public class Login extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(168, 135, 160));
 
-        jPanel1.setBackground(new java.awt.Color(227, 182, 188));
+        jPanel1.setBackground(new java.awt.Color(168, 137, 55));
 
+        jLabel2.setFont(new java.awt.Font("Bitstream Charter", 1, 14)); // NOI18N
         jLabel2.setText("USERNAME:");
 
         jLabel1.setFont(new java.awt.Font("Noto Sans", 1, 24)); // NOI18N
         jLabel1.setText("LOGIN");
 
+        jLabel3.setFont(new java.awt.Font("Bitstream Charter", 1, 14)); // NOI18N
         jLabel3.setText("PASSWORD:");
 
         jButton1.setFont(new java.awt.Font("Noto Sans", 0, 18)); // NOI18N
@@ -142,31 +144,38 @@ public class Login extends javax.swing.JFrame {
         // TODO add your handling code here:
         try {
             conn = DriverManager.getConnection("jdbc:derby://localhost:1527/inuaMkulima", "inuaMkulima", "admin");
-            int log = 1;            
-            String name = txtUsername.getText();
-            String query = ("SELECT * FROM INUAMKULIMA.USERS where Name = ? ");
-            pst = conn.prepareStatement(query);
-            pst.setString(1, name);
-            rs = pst.executeQuery();
-            while (rs.next()) {
-                if (rs.getString(1).equals(txtUsername.getText())){
-                    query = ("UPDATE INUAMKULIMA.USERS SET Status = ? where Name = ?");
+            int log = 1;             
+            if (!txtUsername.getText().isEmpty()){
+                if (!txtPassword.getText().isEmpty()){
+                    String name = txtUsername.getText();
+                    String query = ("SELECT * FROM INUAMKULIMA.USERS where Name = ? ");
                     pst = conn.prepareStatement(query);
-                    pst.setString(1, "online");
-                    pst.setString(2, name);
-                    pst.executeUpdate();
-                    if (rs.getString(2).equals(txtPassword.getText())) {
-                    log = 0;
-                    break;
+                    pst.setString(1, name);
+                    rs = pst.executeQuery();
+                    if (rs.next()) {
+                                if (rs.getString(1).equals(txtUsername.getText())){
+                                    query = ("UPDATE INUAMKULIMA.USERS SET Status = ? where Name = ?");
+                                    pst = conn.prepareStatement(query);
+                                    pst.setString(1, "online");
+                                    pst.setString(2, name);
+                                    pst.executeUpdate();
+                                    if (rs.getString(2).equals(txtPassword.getText())) {
+                                    log = 0;
+                                    }else {
+                                        JOptionPane.showMessageDialog(null, "Invalid Password");
+                                    }
+                                } else {
+                                    JOptionPane.showMessageDialog(null, "Username not found");
+                                }
+                        } else {
+                                    JOptionPane.showMessageDialog(null, "Username not found");
+                                } 
                     }else {
-                        JOptionPane.showMessageDialog(null, "Invalid Password");
-                        break;
+                        JOptionPane.showMessageDialog(null, "Enter password!");
+                    }
+                }else {
+                    JOptionPane.showMessageDialog(null, "Enter username!");
                 }
-                } else {
-                    JOptionPane.showMessageDialog(null, "Username not found");
-                    break;
-                }
-            }
             if (log == 0) {
                 JOptionPane.showMessageDialog(null, "Login successfull!!");
                 home openHome = new home();
