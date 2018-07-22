@@ -5,6 +5,7 @@
  */
 package inua_mkulima;
 
+import java.awt.Image;
 import java.sql.Blob;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
@@ -12,6 +13,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Date;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
 /**
@@ -33,6 +35,90 @@ public class inbox extends javax.swing.JFrame {
     public inbox() {
         initComponents();
         setLocationRelativeTo(null);
+        
+        jPanel3.setVisible(false);
+        jPanel6.setVisible(false);
+        jPanel7.setVisible(false);
+        jPanel9.setVisible(false);
+
+        try {
+            conn = DriverManager.getConnection("jdbc:derby://localhost:1527/inuaMkulima", "inuaMkulima", "admin");
+            String query = ("SELECT * FROM INUAMKULIMA.USERS WHERE Status = ? AND Type = ?");
+            pst = conn.prepareStatement(query);
+            pst.setString(1, "online");
+            pst.setString(2, "Market");
+            rs = pst.executeQuery();
+            if (rs.next()) {
+                name = (rs.getString(1));
+            }
+            query = ("SELECT * FROM INUAMKULIMA.TRENDS where Name = ? ");
+            pst = conn.prepareStatement(query);
+            pst.setString(1, name);
+            rs = pst.executeQuery();
+            if (rs.next() && !jPanel3.isVisible()) {
+                name = rs.getString(2);
+                type = rs.getString(3);
+                message = rs.getString(1);
+                date = rs.getString(4);
+                byte[] photo = rs.getBytes(5);
+                getImage(photo, jLabel18);
+                jLabel2.setText(name);
+                jLabel3.setText(type);
+                jLabel3.setText(message);
+                jLabel5.setText(date);
+                jPanel3.setVisible(true);
+            }
+            if (rs.next() && !jPanel6.isVisible()) {
+                name = rs.getString(2);
+                type = rs.getString(3);
+                message = rs.getString(1);
+                date = rs.getString(4);
+                byte[] photo = rs.getBytes(5);
+                getImage(photo, jLabel19);
+                jLabel7.setText(name);
+                jLabel7.setText(type);
+                jLabel8.setText(message);
+                jLabel9.setText(date);
+                jPanel6.setVisible(true);
+            }
+            if (rs.next() && !jPanel7.isVisible()) {
+                name = rs.getString(2);
+                type = rs.getString(3);
+                message = rs.getString(1);
+                date = rs.getString(4);
+                byte[] photo = rs.getBytes(5);
+                getImage(photo, jLabel20);
+                jLabel10.setText(name);
+                jLabel11.setText(type);
+                jLabel12.setText(message);
+                jLabel13.setText(date.toString());
+                jPanel7.setVisible(true);
+            }
+            if (rs.next() && !jPanel9.isVisible()) {
+                name = rs.getString(2);
+                type = rs.getString(3);
+                message = rs.getString(1);
+                date = rs.getString(4);
+                byte[] photo = rs.getBytes(5);
+                getImage(photo, jLabel21);
+                jLabel14.setText(name);
+                jLabel15.setText(type);
+                jLabel16.setText(message);
+                jLabel17.setText(date.toString());
+                jPanel9.setVisible(true);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+    }
+    public void getImage(byte[] photo, javax.swing.JLabel labelImage) {
+        ImageIcon image = new ImageIcon(photo);
+        Image im = image.getImage();
+        Image myImg = im.getScaledInstance(labelImage.getWidth(), labelImage.getHeight(), Image.SCALE_SMOOTH);
+        ImageIcon newImage = new ImageIcon(myImg);
+        labelImage.setIcon(newImage);
     }
 
     /**
@@ -241,7 +327,7 @@ public class inbox extends javax.swing.JFrame {
 
         jScrollPane2.setViewportView(jPanel2);
 
-        jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 60, 790, 400));
+        jPanel1.add(jScrollPane2, new org.netbeans.lib.awtextra.AbsoluteConstraints(70, 60, 780, 400));
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
