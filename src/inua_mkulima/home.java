@@ -29,6 +29,7 @@ import javax.swing.JFrame;
 import javax.swing.JLabel;
 import javax.swing.JMenu;
 import javax.swing.JMenuBar;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.JToolBar;
 import javax.swing.SwingConstants;
@@ -50,6 +51,7 @@ public class home extends javax.swing.JFrame {
     String query = null;
     String message = null;
     String date = null;
+    String typeOnline = null;
 
     public Date date1 = new Date();
 
@@ -139,9 +141,26 @@ public class home extends javax.swing.JFrame {
 
         //add menus to the menubar
         menubar.add(home);
-        menubar.add(farmer);
-        menubar.add(officer);
-        menubar.add(market);
+        try {
+            conn = DriverManager.getConnection("jdbc:derby://localhost:1527/inuaMkulima", "inuaMkulima", "admin");
+            query = ("SELECT * FROM INUAMKULIMA.USERS WHERE Status = ? ");
+            pst = conn.prepareStatement(query);
+            pst.setString(1, "online");
+            rs = pst.executeQuery();
+            if (rs.next()) {
+                typeOnline = rs.getString(3);
+                if (typeOnline.contains("Farmer")) {
+                    menubar.add(farmer);
+                } else if (typeOnline.contains("Agricultural Officer")) {
+                    menubar.add(officer);
+                } else if (typeOnline.contains("Market")) {
+                    menubar.add(market);
+                } 
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+
+        }
         setJMenuBar(menubar);
 
         //setting the toolbar
