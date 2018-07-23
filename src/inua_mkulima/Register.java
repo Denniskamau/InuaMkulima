@@ -39,6 +39,7 @@ public class Register extends javax.swing.JFrame {
         initComponents();
         
         setLocationRelativeTo(null);
+        setTitle("INUA MKULIMA");
     }
 
     /**
