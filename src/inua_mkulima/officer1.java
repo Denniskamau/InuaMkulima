@@ -68,7 +68,7 @@ public class officer1 extends javax.swing.JFrame {
             if (rs.next()) {
                 name = (rs.getString(1));
             }
-            query = ("SELECT * FROM INUAMKULIMA.TRENDS where Name = ? ");
+            query = ("SELECT * FROM INUAMKULIMA.TRENDS where Name = ? ORDER BY Date DESC ");
             pst = conn.prepareStatement(query);
             pst.setString(1, name);
             rs = pst.executeQuery();

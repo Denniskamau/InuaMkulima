@@ -5,8 +5,16 @@
  */
 package inua_mkulima;
 
+import java.awt.Image;
+import java.sql.Blob;
+import java.sql.DriverManager;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
 import java.util.Arrays;
 import java.util.Date;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
 /**
@@ -14,12 +22,104 @@ import javax.swing.JOptionPane;
  * @author dennis
  */
 public class Mkulima extends javax.swing.JFrame {
-
-    /**
-     * Creates new form Mkulima
-     */
+    
+    java.sql.Connection conn = null;
+    ResultSet rs = null;
+    Statement st;
+    PreparedStatement pst;
+    String name = null;
+    String type = null;
+    String query = null;
+    String message = null;
+    String date = null;
+    
     public Mkulima() {
         initComponents();
+        setLocationRelativeTo(null);
+        setTitle("MKULIMA");
+        
+        jPanel5.setVisible(false);
+        jPanel7.setVisible(false);
+        jPanel9.setVisible(false);
+        jPanel10.setVisible(false);
+        
+        try {
+            conn = DriverManager.getConnection("jdbc:derby://localhost:1527/inuaMkulima", "inuaMkulima", "admin");
+            String query = ("SELECT * FROM INUAMKULIMA.USERS where Status = ?");
+            pst = conn.prepareStatement(query);
+            pst.setString(1, "online");
+            //pst.setString(2, "Agricultural Officer");
+            rs = pst.executeQuery();
+            if (rs.next()) {
+                name = (rs.getString(1));
+            }
+            query = ("SELECT * FROM INUAMKULIMA.TRENDS where Name = ? ORDER BY Date DESC");
+            pst = conn.prepareStatement(query);
+            pst.setString(1, name);
+            rs = pst.executeQuery();
+            if (rs.next() && !jPanel5.isVisible()) {
+                name = rs.getString(2);
+                type = rs.getString(3);
+                message = rs.getString(1);
+                date = rs.getString(4);
+                byte[] photo = rs.getBytes(5);
+                getImage(photo, jLabel13);
+                jLabel2.setText(name);
+                jLabel4.setText(type);
+                jLabel3.setText(message);
+                jLabel5.setText(date);
+                jPanel5.setVisible(true);
+            }
+            if (rs.next() && !jPanel7.isVisible()) {
+                name = rs.getString(2);
+                type = rs.getString(3);
+                message = rs.getString(1);
+                date = rs.getString(4);
+                byte[] photo = rs.getBytes(5);
+                getImage(photo, jLabel14);
+                jLabel6.setText(name);
+                jLabel7.setText(type);
+                jLabel8.setText(message);
+                jLabel9.setText(date);
+                jPanel7.setVisible(true);
+            }
+            if (rs.next() && !jPanel9.isVisible()) {
+                name = rs.getString(2);
+                type = rs.getString(3);
+                message = rs.getString(1);
+                date = rs.getString(4);
+                byte[] photo = rs.getBytes(5);
+                getImage(photo, jLabel25);
+                jLabel21.setText(name);
+                jLabel22.setText(type);
+                jLabel23.setText(message);
+                jLabel24.setText(date.toString());
+                jPanel9.setVisible(true);
+            }
+            if (rs.next() && !jPanel10.isVisible()) {
+                name = rs.getString(2);
+                type = rs.getString(3);
+                message = rs.getString(1);
+                date = rs.getString(4);
+                byte[] photo = rs.getBytes(5);
+                getImage(photo, jLabel30);
+                jLabel26.setText(name);
+                jLabel27.setText(type);
+                jLabel28.setText(message);
+                jLabel29.setText(date.toString());
+                jPanel10.setVisible(true);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+    public void getImage(byte[] photo, javax.swing.JLabel labelImage) {
+        ImageIcon image = new ImageIcon(photo);
+        Image im = image.getImage();
+        Image myImg = im.getScaledInstance(labelImage.getWidth(), labelImage.getHeight(), Image.SCALE_SMOOTH);
+        ImageIcon newImage = new ImageIcon(myImg);
+        labelImage.setIcon(newImage);
     }
 
     /**
@@ -32,14 +132,41 @@ public class Mkulima extends javax.swing.JFrame {
     private void initComponents() {
 
         jFrame1 = new javax.swing.JFrame();
-        jPanel1 = new javax.swing.JPanel();
-        jLabel1 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jButton2 = new javax.swing.JButton();
         jButton3 = new javax.swing.JButton();
-        jButton4 = new javax.swing.JButton();
         jButton5 = new javax.swing.JButton();
+        jButton6 = new javax.swing.JButton();
+        jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
+        jPanel3 = new javax.swing.JPanel();
+        jPanel4 = new javax.swing.JPanel();
+        jPanel5 = new javax.swing.JPanel();
+        jLabel2 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
+        jLabel5 = new javax.swing.JLabel();
+        jLabel13 = new javax.swing.JLabel();
+        jPanel6 = new javax.swing.JPanel();
+        jPanel7 = new javax.swing.JPanel();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel7 = new javax.swing.JLabel();
+        jLabel8 = new javax.swing.JLabel();
+        jLabel9 = new javax.swing.JLabel();
+        jLabel14 = new javax.swing.JLabel();
+        jPanel9 = new javax.swing.JPanel();
+        jLabel21 = new javax.swing.JLabel();
+        jLabel22 = new javax.swing.JLabel();
+        jLabel23 = new javax.swing.JLabel();
+        jLabel24 = new javax.swing.JLabel();
+        jLabel25 = new javax.swing.JLabel();
+        jPanel10 = new javax.swing.JPanel();
+        jLabel26 = new javax.swing.JLabel();
+        jLabel27 = new javax.swing.JLabel();
+        jLabel28 = new javax.swing.JLabel();
+        jLabel29 = new javax.swing.JLabel();
+        jLabel30 = new javax.swing.JLabel();
+        jLabel10 = new javax.swing.JLabel();
 
         javax.swing.GroupLayout jFrame1Layout = new javax.swing.GroupLayout(jFrame1.getContentPane());
         jFrame1.getContentPane().setLayout(jFrame1Layout);
@@ -55,7 +182,10 @@ public class Mkulima extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jPanel2.setBackground(new java.awt.Color(168, 137, 55));
+        jPanel2.setForeground(new java.awt.Color(33, 28, 18));
 
+        jButton2.setBackground(new java.awt.Color(254, 225, 20));
+        jButton2.setForeground(new java.awt.Color(33, 28, 18));
         jButton2.setText("Post");
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -63,6 +193,8 @@ public class Mkulima extends javax.swing.JFrame {
             }
         });
 
+        jButton3.setBackground(new java.awt.Color(254, 225, 20));
+        jButton3.setForeground(new java.awt.Color(33, 28, 18));
         jButton3.setText("Inbox");
         jButton3.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -70,13 +202,8 @@ public class Mkulima extends javax.swing.JFrame {
             }
         });
 
-        jButton4.setText("Talk to Officer");
-        jButton4.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton4ActionPerformed(evt);
-            }
-        });
-
+        jButton5.setBackground(new java.awt.Color(254, 225, 20));
+        jButton5.setForeground(new java.awt.Color(33, 28, 18));
         jButton5.setText("Market");
         jButton5.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -84,74 +211,185 @@ public class Mkulima extends javax.swing.JFrame {
             }
         });
 
+        jButton6.setBackground(new java.awt.Color(254, 225, 20));
+        jButton6.setForeground(new java.awt.Color(33, 28, 18));
+        jButton6.setText("HOME");
+        jButton6.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton6ActionPerformed(evt);
+            }
+        });
+
+        jLabel1.setFont(new java.awt.Font("Noto Sans", 0, 20)); // NOI18N
+        jLabel1.setText("RECENT  MKULIMA POSTS");
+        jLabel1.setName("RECENT POSTS"); // NOI18N
+
+        jPanel3.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        javax.swing.GroupLayout jPanel4Layout = new javax.swing.GroupLayout(jPanel4);
+        jPanel4.setLayout(jPanel4Layout);
+        jPanel4Layout.setHorizontalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 6, Short.MAX_VALUE)
+        );
+        jPanel4Layout.setVerticalGroup(
+            jPanel4Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 180, Short.MAX_VALUE)
+        );
+
+        jPanel3.add(jPanel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(1107, 55, -1, -1));
+
+        jPanel5.setBackground(new java.awt.Color(255, 250, 250));
+        jPanel5.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel2.setText("Label");
+        jLabel2.setName("name"); // NOI18N
+        jPanel5.add(jLabel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(124, 12, -1, -1));
+
+        jLabel3.setText("message");
+        jLabel3.setName("message"); // NOI18N
+        jPanel5.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(124, 47, -1, -1));
+
+        jLabel4.setText("(market)");
+        jLabel4.setName("user"); // NOI18N
+        jPanel5.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(180, 10, -1, -1));
+
+        jLabel5.setText("jLabel5");
+        jPanel5.add(jLabel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 80, 220, -1));
+
+        jLabel13.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        jPanel5.add(jLabel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(12, 12, 83, 74));
+
+        jPanel3.add(jPanel5, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 10, 726, 100));
+
+        javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
+        jPanel6.setLayout(jPanel6Layout);
+        jPanel6Layout.setHorizontalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 6, Short.MAX_VALUE)
+        );
+        jPanel6Layout.setVerticalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 100, Short.MAX_VALUE)
+        );
+
+        jPanel3.add(jPanel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(851, 209, -1, -1));
+
+        jPanel7.setBackground(new java.awt.Color(255, 250, 250));
+        jPanel7.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel6.setText("jLabel6");
+        jPanel7.add(jLabel6, new org.netbeans.lib.awtextra.AbsoluteConstraints(125, 12, -1, -1));
+
+        jLabel7.setText("(farmer)");
+        jPanel7.add(jLabel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(183, 12, -1, -1));
+
+        jLabel8.setText("jLabel8");
+        jPanel7.add(jLabel8, new org.netbeans.lib.awtextra.AbsoluteConstraints(125, 57, -1, -1));
+
+        jLabel9.setText("jLabel9");
+        jPanel7.add(jLabel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 80, 220, -1));
+
+        jLabel14.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        jPanel7.add(jLabel14, new org.netbeans.lib.awtextra.AbsoluteConstraints(12, 12, 83, 74));
+
+        jPanel3.add(jPanel7, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 120, 726, -1));
+
+        jPanel9.setBackground(new java.awt.Color(255, 250, 250));
+        jPanel9.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel21.setText("jLabel6");
+        jPanel9.add(jLabel21, new org.netbeans.lib.awtextra.AbsoluteConstraints(125, 12, -1, -1));
+
+        jLabel22.setText("(farmer)");
+        jPanel9.add(jLabel22, new org.netbeans.lib.awtextra.AbsoluteConstraints(183, 12, -1, -1));
+
+        jLabel23.setText("jLabel8");
+        jPanel9.add(jLabel23, new org.netbeans.lib.awtextra.AbsoluteConstraints(125, 57, -1, -1));
+
+        jLabel24.setText("jLabel9");
+        jPanel9.add(jLabel24, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 80, 220, -1));
+
+        jLabel25.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        jPanel9.add(jLabel25, new org.netbeans.lib.awtextra.AbsoluteConstraints(12, 12, 83, 74));
+
+        jPanel3.add(jPanel9, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 240, 726, -1));
+
+        jPanel10.setBackground(new java.awt.Color(255, 250, 250));
+        jPanel10.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
+
+        jLabel26.setText("jLabel6");
+        jPanel10.add(jLabel26, new org.netbeans.lib.awtextra.AbsoluteConstraints(125, 12, -1, -1));
+
+        jLabel27.setText("(farmer)");
+        jPanel10.add(jLabel27, new org.netbeans.lib.awtextra.AbsoluteConstraints(183, 12, -1, -1));
+
+        jLabel28.setText("jLabel8");
+        jPanel10.add(jLabel28, new org.netbeans.lib.awtextra.AbsoluteConstraints(125, 57, -1, -1));
+
+        jLabel29.setText("jLabel9");
+        jPanel10.add(jLabel29, new org.netbeans.lib.awtextra.AbsoluteConstraints(500, 80, 210, -1));
+
+        jLabel30.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        jPanel10.add(jLabel30, new org.netbeans.lib.awtextra.AbsoluteConstraints(12, 12, 83, 74));
+
+        jPanel3.add(jPanel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(40, 350, 726, -1));
+        jPanel3.add(jLabel10, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 480, -1, -1));
+
+        jScrollPane1.setViewportView(jPanel3);
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(20, 20, 20)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1)
                     .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(38, 38, 38)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 817, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(323, 323, 323)
+                        .addComponent(jLabel1))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(236, 236, 236)
                         .addComponent(jButton2)
-                        .addGap(36, 36, 36)
+                        .addGap(57, 57, 57)
                         .addComponent(jButton3)
-                        .addGap(35, 35, 35)
-                        .addComponent(jButton4)
-                        .addGap(49, 49, 49)
+                        .addGap(68, 68, 68)
                         .addComponent(jButton5)
-                        .addGap(0, 265, Short.MAX_VALUE)))
-                .addContainerGap())
+                        .addGap(49, 49, 49)
+                        .addComponent(jButton6)))
+                .addContainerGap(46, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(9, 9, 9)
+                .addComponent(jLabel1)
+                .addGap(12, 12, 12)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jButton2)
                     .addComponent(jButton3)
-                    .addComponent(jButton4)
-                    .addComponent(jButton5))
-                .addGap(18, 18, 18)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 313, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(141, Short.MAX_VALUE))
-        );
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton5)
+                    .addComponent(jButton6))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel1)
-                .addContainerGap(20, Short.MAX_VALUE))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(35, 35, 35)
-                .addComponent(jLabel1)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 395, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(77, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
 
@@ -160,34 +398,57 @@ public class Mkulima extends javax.swing.JFrame {
 
     private void jButton5ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton5ActionPerformed
         // TODO add your handling code here:
-        market soko = new market();
-        soko.show();
-
+        new farmerMarket().setVisible(true);
         setVisible(false);
     }//GEN-LAST:event_jButton5ActionPerformed
 
-    private void jButton4ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton4ActionPerformed
-        // TODO add your handling code here:
-        String message = JOptionPane.showInputDialog(null,"Input message for Officer");
-
-        JOptionPane.showMessageDialog(null, "Your message has been send");
-    }//GEN-LAST:event_jButton4ActionPerformed
-
     private void jButton3ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton3ActionPerformed
         // TODO add your handling code here:
-        inbox mpya = new inbox();
-        mpya.show();
+        new talkOfficer().setVisible(true);
         setVisible(false) ;
     }//GEN-LAST:event_jButton3ActionPerformed
 
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
         // TODO add your handling code here:
-
-        String message = JOptionPane.showInputDialog(null,"Please Input message");
-
-        JOptionPane.showMessageDialog(null, "Your message has been posted");
-
+        try {
+            conn = DriverManager.getConnection("jdbc:derby://localhost:1527/inuaMkulima", "inuaMkulima", "admin");
+            st = conn.createStatement();
+            String query = ("SELECT * FROM INUAMKULIMA.USERS where Status = ?");
+            pst = conn.prepareStatement(query);
+            pst.setString(1, "online");
+            //pst.setString(2, "Farmer");
+            rs = pst.executeQuery();
+            if (rs.next()) {
+                System.out.println(rs.getString(1));
+                name = rs.getString(1);
+                type = rs.getString(3);
+                Blob image = rs.getBlob(5);
+                Date date = new Date();
+                message = JOptionPane.showInputDialog(null, "Write your post:");
+                if (message != null && !message.isEmpty()) {
+                    query = ("insert into INUAMKULIMA.TRENDS(Message, Name, Type, Date, Image)values(?,?,?,?,?)");
+                    pst = conn.prepareStatement(query);
+                    pst.setString(1, message);
+                    pst.setString(3, "(" + type + ")");
+                    pst.setString(2, name);
+                    pst.setString(4, date.toString());
+                    pst.setBlob(5, image);
+                    pst.executeUpdate();
+                    JOptionPane.showMessageDialog(null, "Posted successfully!!");
+                    this.setVisible(false);
+                    new Mkulima().setVisible(true);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }//GEN-LAST:event_jButton2ActionPerformed
+
+    private void jButton6ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton6ActionPerformed
+        // TODO add your handling code here:
+        new home().setVisible(true);
+        this.setVisible(false);
+    }//GEN-LAST:event_jButton6ActionPerformed
 
     /**
      * @param args the command line arguments
@@ -227,12 +488,39 @@ public class Mkulima extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jButton2;
     private javax.swing.JButton jButton3;
-    private javax.swing.JButton jButton4;
     private javax.swing.JButton jButton5;
+    private javax.swing.JButton jButton6;
     private javax.swing.JFrame jFrame1;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JPanel jPanel1;
+    private javax.swing.JLabel jLabel10;
+    private javax.swing.JLabel jLabel13;
+    private javax.swing.JLabel jLabel14;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel21;
+    private javax.swing.JLabel jLabel22;
+    private javax.swing.JLabel jLabel23;
+    private javax.swing.JLabel jLabel24;
+    private javax.swing.JLabel jLabel25;
+    private javax.swing.JLabel jLabel26;
+    private javax.swing.JLabel jLabel27;
+    private javax.swing.JLabel jLabel28;
+    private javax.swing.JLabel jLabel29;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel30;
+    private javax.swing.JLabel jLabel4;
+    private javax.swing.JLabel jLabel5;
+    private javax.swing.JLabel jLabel6;
+    private javax.swing.JLabel jLabel7;
+    private javax.swing.JLabel jLabel8;
+    private javax.swing.JLabel jLabel9;
+    private javax.swing.JPanel jPanel10;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
+    private javax.swing.JPanel jPanel4;
+    private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
+    private javax.swing.JPanel jPanel7;
+    private javax.swing.JPanel jPanel9;
     private javax.swing.JScrollPane jScrollPane1;
     // End of variables declaration//GEN-END:variables
 }

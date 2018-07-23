@@ -329,9 +329,8 @@ public class home extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        jPanel13 = new javax.swing.JPanel();
-        jLabel3 = new javax.swing.JLabel();
         jLabel23 = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
         jPanel7 = new javax.swing.JPanel();
         jLabel13 = new javax.swing.JLabel();
         jPanel11 = new javax.swing.JPanel();
@@ -432,36 +431,15 @@ public class home extends javax.swing.JFrame {
         jLabel4.setText("12/04/2018");
         jPanel1.add(jLabel4, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 80, -1, -1));
 
-        jPanel13.setBackground(java.awt.SystemColor.controlLtHighlight);
+        jLabel23.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
+        jPanel1.add(jLabel23, new org.netbeans.lib.awtextra.AbsoluteConstraints(18, 23, 67, 64));
 
         jLabel3.setBackground(java.awt.SystemColor.controlLtHighlight);
         jLabel3.setText("jLabel3");
-
-        javax.swing.GroupLayout jPanel13Layout = new javax.swing.GroupLayout(jPanel13);
-        jPanel13.setLayout(jPanel13Layout);
-        jPanel13Layout.setHorizontalGroup(
-            jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel13Layout.createSequentialGroup()
-                .addComponent(jLabel3)
-                .addGap(0, 0, Short.MAX_VALUE))
-        );
-        jPanel13Layout.setVerticalGroup(
-            jPanel13Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel13Layout.createSequentialGroup()
-                .addComponent(jLabel3)
-                .addGap(0, 24, Short.MAX_VALUE))
-        );
-
+        jPanel1.add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(100, 50, -1, -1));
         jLabel3.setText("Hi everyone!Remember next month we expect rains. Start cultivating now");
         jLabel3.setVerticalAlignment(SwingConstants.TOP);
         jLabel3.setOpaque(true);
-
-        jPanel1.add(jPanel13, new org.netbeans.lib.awtextra.AbsoluteConstraints(97, 46, 134, -1));
-        jPanel4.add(jLabel6);
-        jPanel4.setVisible(true);
-
-        jLabel23.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(0, 0, 0)));
-        jPanel1.add(jLabel23, new org.netbeans.lib.awtextra.AbsoluteConstraints(18, 23, 67, 64));
 
         jPanel7.setBackground(java.awt.SystemColor.controlLtHighlight);
         jPanel7.setPreferredSize(new java.awt.Dimension(872, 116));
@@ -928,7 +906,6 @@ public class home extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel11;
-    private javax.swing.JPanel jPanel13;
     private javax.swing.JPanel jPanel14;
     private javax.swing.JPanel jPanel15;
     private javax.swing.JPanel jPanel16;

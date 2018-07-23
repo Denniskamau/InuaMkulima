@@ -1,7 +1,7 @@
-Sun Jul 22 12:03:31 EAT 2018 : Apache Derby Network Server - 10.10.2.0 - (1582446) started and ready to accept connections on port 1527
+Mon Jul 23 10:02:37 EAT 2018 : Apache Derby Network Server - 10.10.2.0 - (1582446) started and ready to accept connections on port 1527
 ----------------------------------------------------------------
-Sun Jul 22 12:03:31 EAT 2018:
-Booting Derby version The Apache Software Foundation - Apache Derby - 10.10.2.0 - (1582446): instance a816c00e-0164-c13a-c2a2-fffff4bfbb50 
+Mon Jul 23 10:02:38 EAT 2018:
+Booting Derby version The Apache Software Foundation - Apache Derby - 10.10.2.0 - (1582446): instance a816c00e-0164-c5f2-6e5e-fffff4bfbb50 
 on database directory /home/georgiegegoh/Desktop/inua_mkulima/src/inuaMkulima with class loader sun.misc.Launcher$AppClassLoader@3764951d 
 Loaded from file:/home/georgiegegoh/glassfish-4.1.1/javadb/lib/derby.jar
 java.vendor=Oracle Corporation
@@ -12,3 +12,5 @@ os.arch=amd64
 os.version=4.8.0-53-generic
 derby.system.home=/home/georgiegegoh/Desktop/inua_mkulima/src
 Database Class Loader started - derby.database.classpath=''
+----------------------------------------------------------------
+Mon Jul 23 13:35:05 EAT 2018: Shutting down Derby engine
