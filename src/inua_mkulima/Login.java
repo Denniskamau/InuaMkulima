@@ -51,7 +51,7 @@ public class Login extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setBackground(new java.awt.Color(168, 135, 160));
 
-        jPanel1.setBackground(new java.awt.Color(168, 137, 55));
+        jPanel1.setBackground(new java.awt.Color(211, 169, 59));
 
         jLabel2.setFont(new java.awt.Font("Bitstream Charter", 1, 14)); // NOI18N
         jLabel2.setText("USERNAME:");
